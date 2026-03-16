@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Vodafone Identity Match → PowerPoint</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<!-- PptxGenJS with multiple CDN fallbacks -->
+<script>
+(function() {
+    var cdnSources = [
+        'https://unpkg.com/pptxgenjs@3.12.0/dist/pptxgen.bundle.js',
+        'https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/PptxGenJS/3.12.0/pptxgen.bundle.js'
+    ];
+    
+    function loadScript(src, callback) {
+        var script = document.createElement('script');
+        script.src = src;
+        script.onload = callback;
+        script.onerror = function() {
+            console.warn('Failed to load PptxGenJS from:', src);
+            callback(false);
+        };
+        document.head.appendChild(script);
+    }
+    
+    function tryNextSource(index) {
+        if (index >= cdnSources.length) {
+            console.error('All PptxGenJS CDN sources failed');
+            document.getElementById('btn-gen').disabled = true;
+            document.getElementById('btn-label').textContent = '⚠️ Library Load Failed';
+            alert('Error: Could not load PptxGenJS library from any source. Please check your internet connection or try a different browser.');
+            return;
+        }
+        
+        loadScript(cdnSources[index], function(success) {
+            if (success !== false && typeof PptxGenJS !== 'undefined') {
+                console.log('PptxGenJS loaded successfully from:', cdnSources[index]);
+            } else {
+                tryNextSource(index + 1);
+            }
+        });
+    }
+    
+    // Start trying to load from the first source
+    tryNextSource(0);
+})();
+</script>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">Excel → PowerPoint</p>
+  <h1>Vodafone Identity Match<br/>Summary Generator</h1>
+  <p class="subtitle">Upload your Excel file and instantly get a polished PowerPoint slide grouping identity match results by analyst with totals.</p>
+</header>
+
+<!-- Step 1: Upload -->
+<div class="card" id="card-upload">
+  <p class="card-title">Step 1 — Upload Excel File</p>
+  <div class="dropzone" id="dropzone">
+    <input type="file" id="fileInput" accept=".xlsx,.xls,.csv"/>
+    <span class="drop-icon">📊</span>
+    <p class="drop-label">Drop your Excel file here</p>
+    <p class="drop-sub">or <span>click to browse</span> · .xlsx, .xls, .csv</p>
+  </div>
+  <div id="upload-msg" class="msg msg-info hidden"></div>
+</div>
+
+<!-- Step 2: Column Mapping -->
+<div class="card hidden" id="card-mapping">
+  <p class="card-title">Step 2 — Map Columns</p>
+  <div class="col-grid">
+    <div class="field-group">
+      <label>Analyst Name Column</label>
+      <select id="col-name"></select>
+    </div>
+    <div class="field-group">
+      <label>Project Names Column</label>
+      <select id="col-project"></select>
+    </div>
+    <div class="field-group">
+      <label>Project ID Column</label>
+      <select id="col-id"></select>
+    </div>
+    <div class="field-group">
+      <label>Grouping Column</label>
+      <select id="col-gate"></select>
+    </div>
+  </div>
+  <div id="mapping-msg" class="msg msg-info hidden"></div>
+</div>
+
+<!-- Step 3: Preview -->
+<div class="card hidden" id="card-preview">
+  <p class="card-title">Step 3 — Data Preview</p>
+  <div class="preview-wrap">
+    <table id="preview-table">
+      <thead id="preview-head"></thead>
+      <tbody id="preview-body"></tbody>
+    </table>
+  </div>
+  <div class="stats-bar" id="stats-bar"></div>
+</div>
+
+<!-- Generate -->
+<button class="btn-generate" id="btn-gen" disabled>
+  <div class="spinner"></div>
+  <span id="btn-label">⚡ Generate PowerPoint Slide</span>
+</button>
+
+<div class="toast" id="toast">✅ Slide downloaded successfully!</div>
+
+<script src="main.js"></script>
+</body>
+</html>
