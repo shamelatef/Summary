@@ -158,7 +158,7 @@ async function buildPPTX() {
   // ── Group data by name and gate approved ──────────────────────────────────
   const grouped = {};
   rawData.forEach(row => {
-    const name = String(row[cols.name] || 'Unknown').trim();
+    const name = String(row[cols.name] || 'Unknown').trim().split(',')[0];
     const gateValue = row[cols.gate];
     const gate = gateValue !== null && gateValue !== undefined ? String(gateValue).trim() : 'Unknown';
 
@@ -372,7 +372,7 @@ async function buildPPTX() {
 
         slide.addText(proj.id, {
           ...textOpts, x: x + projColW + 0.10, y: currentY, w: idColW, h: projRowH,
-          color: C.muted, shrinkText: true,
+          color: C.muted, shrinkText: true, align: 'center',
         });
 
         currentY += projRowH;
