@@ -64,7 +64,7 @@ function handleFile(file) {
 
 function populateSelects() {
   const hints = {
-    name:    ['PM','name','person','employee','staff','who','resource','user'],
+    name:    ['PM','name','person','employee','staff','who','resource','user','Project Manager'],
     project: ['project name','project','title','pname','proj name','project names'],
     id:      ['project id','proj id','pid','id','case','reference','number','no','ticket'],
     gate:    ['match score','score','gate','approved','status','result','rating','category','type','level','priority','classification','group'],
@@ -318,7 +318,7 @@ async function buildPPTX() {
         x: x + ox, y: subHdrY, w, h: subHdrH,
         fontSize: 7.5, bold: true, color: C.muted,
         fontFace: 'Calibri', valign: 'middle', margin: 0,
-        charSpacing: 1.5,
+        charSpacing: 1.5, align: 'center',
       });
     });
 
